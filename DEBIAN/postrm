@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+APPID="rustdesk-server"
+if [ "$1" = "purge" ]; then
+    id -u "${APPID}" >/dev/null 2>&1 && userdel "${APPID}" 2>/dev/null || true
+    rm -rf /var/lib/rustdesk-server /usr/local/rustdesk-server 2>/dev/null || true
+    rm -f /etc/systemd/system/hbbs.service /etc/systemd/system/hbbr.service 2>/dev/null || true
+    systemctl daemon-reload 2>/dev/null || true
+fi
+exit 0

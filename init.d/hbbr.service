@@ -1,0 +1,40 @@
+[Unit]
+Description=RustDesk Server - hbbr (Relay) (TOS)
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+User=rustdesk-server
+Group=rustdesk-server
+EnvironmentFile=/usr/local/rustdesk-server/rustdesk-server.env
+WorkingDirectory=/var/lib/rustdesk-server
+ExecStart=/usr/local/rustdesk-server/bin/hbbr
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+# Security hardening (TOS 7 review requires NoNewPrivileges/ProtectSystem/ProtectHome;
+# Restart= is intentionally omitted — service lifecycle is managed by the platform)
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+MemoryDenyWriteExecute=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+SystemCallArchitectures=native
+
+# Keys and databases live under RUSTDESK_DATA_DIR only
+ReadWritePaths=/var/lib/rustdesk-server
+
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

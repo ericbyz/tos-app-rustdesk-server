@@ -1,0 +1,30 @@
+#!/bin/bash
+# Post-installation script — runs after the package is installed
+set -e
+
+APPID="rustdesk-server"
+APP_DIR="/usr/local/${APPID}"
+
+if ! id -u "${APPID}" > /dev/null 2>&1; then
+    useradd --system --no-create-home --shell /usr/sbin/nologin "${APPID}" 2>/dev/null || true
+fi
+
+chown -R "${APPID}:${APPID}" "${APP_DIR}" 2>/dev/null || true
+
+mkdir -p /var/lib/rustdesk-server 2>/dev/null || true
+chown -R "${APPID}:${APPID}" /var/lib/rustdesk-server 2>/dev/null || true
+
+case "$1" in
+    configure)
+        if [ -n "$2" ]; then
+            echo "${APPID}: upgrading from version $2 (keys in /var/lib/rustdesk-server preserved)"
+        fi
+        systemctl daemon-reload 2>/dev/null || true
+        systemctl enable "hbbs.service" "hbbr.service" 2>/dev/null || true
+        systemctl start "hbbs.service" "hbbr.service" 2>/dev/null || true
+        ;;
+    *) ;;
+esac
+
+echo "${APPID} installed successfully."
+exit 0

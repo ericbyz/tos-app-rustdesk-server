@@ -1,0 +1,16 @@
+# Upstream project pin — single source of truth for reproducible builds.
+# rustdesk-server is packaged unmodified from upstream rustdesk/rustdesk-server
+# (AGPL-3.0). IMPORTANT: this package must NOT modify the upstream binaries;
+# it only adds packaging metadata, systemd units and a static instruction page.
+
+UPSTREAM_REPO=https://github.com/rustdesk/rustdesk-server
+UPSTREAM_LICENSE=AGPL-3.0
+
+UPSTREAM_TAG=1.1.16
+UPSTREAM_VERSION=1.1.16
+
+ASSET_x86_64=rustdesk-server-linux-amd64.zip
+ASSET_aarch64=rustdesk-server-linux-arm64v8.zip
+
+SHA256_x86_64=0565c41affe6c3f409b0bddfaf5a24ccbf3f64f5f8e3fec250b69a0d5f6bdbcf
+SHA256_aarch64=6a4ae3c5ca257a4278ded72fd17eb2ca4eeb0356a5425e63a3e7fcb0ec6c155c

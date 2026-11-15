@@ -1,0 +1,14 @@
+Package: rustdesk-server
+Version: 1.1.16
+Architecture: amd64
+Section: net
+Priority: optional
+Maintainer: ericbyz <ericbyz@users.noreply.github.com>
+Depends: systemd
+Description: Self-hosted RustDesk remote desktop relay (hbbs/hbbr)
+ Run the RustDesk open-source server on the TNAS: hbbs (ID/signalling)
+ and hbbr (relay) so remote-desktop sessions never leave your network.
+ Ships a static instruction page (floating window in the TOS desktop)
+ showing the client configuration and the server public key.
+ Upstream project: https://github.com/rustdesk/rustdesk-server (AGPL-3.0),
+ packaged unmodified.

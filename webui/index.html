@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RustDesk Server · 自建远控中继</title>
+<style>
+  :root { --line:#e5e7eb; --muted:#6b7280; --accent:#0ea5e9; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.6 "PingFang SC","Microsoft YaHei",system-ui,sans-serif; color:#111827; background:#f6f8fa; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 18px 48px; }
+  h1 { font-size: 20px; display:flex; align-items:center; gap:10px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:14px 0; }
+  .card h2 { font-size:15px; margin:0 0 10px; }
+  code, .kbd { font-family: ui-monospace, Consolas, monospace; background:#eef2f7; padding:2px 6px; border-radius:6px; font-size:12.5px; word-break:break-all; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:500; }
+  .hint { color:var(--muted); font-size:12.5px; }
+  .ok { color:#16a34a; font-weight:600; }
+  .muted { color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🛰️ RustDesk Server<span class="muted" style="font-size:13px">自建远控中继 · hbbs + hbbr</span></h1>
+
+  <div class="card">
+    <h2>服务状态</h2>
+    <table>
+      <tr><th>服务</th><th>作用</th><th>端口</th></tr>
+      <tr><td><code>hbbs</code>(ID/信令)</td><td>设备注册、打洞与 ID 分配</td><td><code>TCP 21114-21116, 21118</code> / <code>UDP 21116</code></td></tr>
+      <tr><td><code>hbbr</code>(中继)</td><td>远控流量中继</td><td><code>TCP 21117, 21119</code></td></tr>
+    </table>
+    <p class="hint">两个服务由系统管理(开机自启)。密钥与数据库保存在 <code>/var/lib/rustdesk-server</code>。</p>
+  </div>
+
+  <div class="card">
+    <h2>客户端配置(RustDesk 桌面/手机端)</h2>
+    <ol style="margin:0 0 8px 18px; padding:0;">
+      <li>打开 RustDesk 客户端 → <b>ID 服务器</b> 填本机地址:<code id="nasaddr">__NAS_ADDR__</code></li>
+      <li><b>Key</b> 填本机公钥(见下方);中继服务器可留空(默认同 ID 服务器)</li>
+    </ol>
+    <p class="hint">公钥文件:<code>/var/lib/rustdesk-server/id_ed25519.pub</code>。在 TOS 终端执行
+    <code>cat /var/lib/rustdesk-server/id_ed25519.pub</code> 查看。</p>
+  </div>
+
+  <div class="card">
+    <h2>常用操作(TOS 终端)</h2>
+    <p><code>systemctl status hbbs hbbr</code> — 查看服务状态</p>
+    <p><code>systemctl restart hbbs hbbr</code> — 重启服务</p>
+    <p><code>cat /var/lib/rustdesk-server/id_ed25519.pub</code> — 查看客户端所需 Key</p>
+    <p class="hint">跨公网使用时,请在上表端口的路由器上做端口映射,并把客户端的 ID 服务器填成本机公网/DDNS 地址。</p>
+  </div>
+
+  <div class="card">
+    <h2>合规说明</h2>
+    <p class="hint">本应用将上游 rustdesk/rustdesk-server(AGPL-3.0)二进制<b>原样封装</b>,未修改任何上游代码。
+    说明页为本封装原创内容。上游仓库:https://github.com/rustdesk/rustdesk-server</p>
+  </div>
+</div>
+<script>
+  // 悬浮窗内显示当前访问地址,方便直接抄进客户端
+  document.getElementById("nasaddr").textContent = location.hostname + "(端口默认 21116)";
+</script>
+</body>
+</html>

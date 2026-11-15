@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+APPID="rustdesk-server"
+case "$1" in
+    remove|deconfigure)
+        pkill -u "${APPID}" 2>/dev/null || true
+        sleep 1
+        systemctl stop "hbbs.service" "hbbr.service" 2>/dev/null || true
+        systemctl disable "hbbs.service" "hbbr.service" 2>/dev/null || true
+        ;;
+    upgrade|failed-upgrade) ;;
+    *) ;;
+esac
+exit 0
